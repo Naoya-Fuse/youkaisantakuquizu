@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>ようかいクイズ</title>
+</head>
+<body>
+    <img src="{{ image_path }}" alt="妖怪のシルエット">
+    <img src="{{ non_silhouette_image_path }}" alt="妖怪の画像" style="display: none;">
+    <form action="{{ url_for('answer') }}" method="post">
+        <input type="hidden" name="correct_answer" value="{{ correct_answer_jp }}">
+        <input type="hidden" name="image_name" value="{{ image_name }}">
+        <p>このようかいはなんでしょう？</p>
+        {% for choice in choices %}
+            <input type="radio" name="guess" value="{{ choice }}" required> {{ choice }}<br>
+        {% endfor %}
+        <input type="submit" value="こたえる">
+    </form>
+</body>
+</html>
+

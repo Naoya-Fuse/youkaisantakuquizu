@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>ようかいクイズの結果</title>
+</head>
+<body>
+    <img src="{{ non_silhouette_image_path }}" alt="妖怪の画像">
+    {% if result == '正解！' %}
+        <h1>せいかい！</h1>
+    {% else %}
+        <h1>ふせいかい！</h1>
+        <p>ようかいのなまえは「{{ correct_answer }}」でした。</p>
+    {% endif %}
+    <a href="/">もういっかい！</a>
+</body>
+</html>

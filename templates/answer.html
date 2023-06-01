@@ -12,6 +12,15 @@
         <h1>ふせいかい！</h1>
         <p>ようかいのなまえは「{{ correct_answer }}」でした。</p>
     {% endif %}
-    <a href="/">もういっかい！</a>
+    {% if count < 5 %}
+        <form action="/next" method="post">
+            <input type="submit" value="つぎのもんだいにすすむ">
+        </form>
+    {% else %}
+        <form action="/next" method="post">
+            <input type="submit" value="けっかをみる">
+        </form>
+    {% endif %}
 </body>
 </html>
+

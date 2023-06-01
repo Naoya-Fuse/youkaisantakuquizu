@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>クイズのけっか</title>
+</head>
+<body>
+    <h1>クイズのけっか</h1>
+    <p>クイズにこたえたかず: {{ total }}</p>
+    <p>クイズにせいかいしたかず: {{ correct }}</p>
+    {% if percentage == 0 %}
+        <p>あなたのてんすう: {{ percentage }} てんじゃ。ようかいにしてやろうかの！</p>
+        <img src="/static/images/final/020ten.jpg" alt="Result image">
+    {% elif percentage <= 20 %}
+        <p>あなたのてんすう: {{ percentage }} てんじゃ。まだまだじゃな！</p>
+        <img src="/static/images/final/020ten.jpg" alt="Result image">
+    {% elif percentage <= 40 %}
+        <p>あなたのてんすう: {{ percentage }} てんじゃ。しっかりべんきょうせい！</p>
+        <img src="/static/images/final/406080ten.jpg" alt="Result image">
+    {% elif percentage <= 60 %}
+        <p>あなたのてんすう: {{ percentage }} てんじゃ。もっとべんきょうせい！</p>
+        <img src="/static/images/final/406080ten.jpg" alt="Result image">
+    {% elif percentage <= 80 %}
+        <p>あなたのてんすう: {{ percentage }} てんじゃ。すごいのう！</p>
+        <img src="/static/images/final/406080ten.jpg" alt="Result image">
+    {% else %}
+        <p>あなたのてんすう: {{ percentage }} てんじゃ！とてもステキじゃあ！</p>
+        <img src="/static/images/final/100ten.jpg" alt="Result image">
+    {% endif %}
+    <button onclick="window.location.href = '/'">もういっかい！</button>
+</body>
+</html>
+

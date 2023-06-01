@@ -1,20 +1,25 @@
 # coding: utf-8
 
-from flask import Flask, render_template, request, url_for
+from flask import Flask, render_template, request, url_for, redirect, session
 import os
 import random
 import json
 
 app = Flask(__name__)
 
+app.secret_key = os.urandom(24)
+
 # 画像フォルダ内のファイル名を取得する
 image_names = os.listdir('static/images/output_folder')
 
+count = 0
+correct_count = 0
 
 # answers.jsonからデータを読み込む
 def get_answers():
     with open('answer.json', 'r', encoding='utf-8') as f:
         return json.load(f)
+
 # answers.jsonのキー（日本語の名前）をリストにする
 answers = get_answers()
 image_names = list(answers.keys())
@@ -30,8 +35,15 @@ def create_choices(answers, correct_answer):
     random.shuffle(choices)
     return choices
 
+
 @app.route('/')
 def index():
+    session['count'] = session.get('count', 0)
+    session['correct_count'] = session.get('correct_count', 0)
+
+    if session['count'] >= 5:
+        return redirect(url_for('final'))
+
     # 日本語名のリストからランダムに1つ選ぶ
     correct_answer_jp = random.choice(list(answers.values()))
     # 選択した日本語名に対応する英語名（画像ファイル名）を取得する
@@ -46,6 +58,7 @@ def index():
 
 @app.route('/answer', methods=['POST'])
 def answer():
+    session['count'] += 1
     # 3択問題で入力した名前を取得する
     guess = request.form['guess']
     # 正解の場合は'input_folder'フォルダの画像を表示する
@@ -59,11 +72,30 @@ def answer():
     # 3択問題で入力した名前と正解を比較する
     if guess == correct_answer_jp:
         result = '正解！'
-    return render_template('answer.html', image_path=image_path, result=result, correct_answer=correct_answer_jp, guess=guess, non_silhouette_image_path=non_silhouette_image_path)
+        session['correct_count'] += 1
+
+    return render_template('answer.html', image_path=image_path, result=result, correct_answer=correct_answer_jp, guess=guess, non_silhouette_image_path=non_silhouette_image_path, count=session['count'])
+
+@app.route('/next', methods=['POST'])
+def next():
+    if session['count'] < 5:
+        return redirect(url_for('index'))
+    else:
+        return redirect(url_for('final'))
+
+@app.route('/final')
+def final():
+    correct = session['correct_count']
+    total = session['count']
+    percentage = (correct / total) * 100
+    session['count'] = 0
+    session['correct_count'] = 0
+    return render_template('final.html', correct=correct, total=total, percentage=percentage)
+
  
-    
 if __name__ == '__main__':
     app.run(debug=True)
+
 
   
 
